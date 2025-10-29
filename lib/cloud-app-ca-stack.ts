@@ -1,8 +1,9 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as lambdaNode from 'aws-cdk-lib/aws-lambda-nodejs';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
 
 export class CloudAppCaStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -13,18 +14,24 @@ export class CloudAppCaStack extends cdk.Stack {
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
     });
 
-    const getMoviesLambda = new lambda.Function(this, 'GetMoviesLambda', {
+    // GET 
+    const getMoviesLambda = new lambdaNode.NodejsFunction(this, 'GetMoviesLambda', {
+      entry: 'lambda/getMovies.js',
       runtime: lambda.Runtime.NODEJS_18_X,
-      code: lambda.Code.fromAsset('lambda'),
-      handler: 'getMovies.handler',
-      environment: { TABLE_NAME: moviesTable.tableName },
+      handler: 'handler',
+      environment: {
+        TABLE_NAME: moviesTable.tableName,
+      },
     });
 
-    const addMovieLambda = new lambda.Function(this, 'AddMovieLambda', {
+    // POST 
+    const addMovieLambda = new lambdaNode.NodejsFunction(this, 'AddMovieLambda', {
+      entry: 'lambda/addMovie.js',
       runtime: lambda.Runtime.NODEJS_18_X,
-      code: lambda.Code.fromAsset('lambda'),
-      handler: 'addMovie.handler',
-      environment: { TABLE_NAME: moviesTable.tableName },
+      handler: 'handler',
+      environment: {
+        TABLE_NAME: moviesTable.tableName,
+      },
     });
 
     moviesTable.grantReadData(getMoviesLambda);

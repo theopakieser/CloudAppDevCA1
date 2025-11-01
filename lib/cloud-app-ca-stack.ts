@@ -10,7 +10,8 @@ export class CloudAppCaStack extends cdk.Stack {
     super(scope, id, props);
 
     const moviesTable = new dynamodb.Table(this, 'MoviesTable', {
-      partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING },
+      partitionKey: { name: "pk", type: dynamodb.AttributeType.STRING },
+      sortKey: { name: "sk", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
     });
 

@@ -15,7 +15,7 @@ export class CloudAppCaStack extends cdk.Stack {
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
     });
 
-    // GET 
+    // GET
     const getMoviesLambda = new lambdaNode.NodejsFunction(this, 'GetMoviesLambda', {
       entry: 'lambda/getMovies.js',
       runtime: lambda.Runtime.NODEJS_18_X,
@@ -23,6 +23,14 @@ export class CloudAppCaStack extends cdk.Stack {
       environment: {
         TABLE_NAME: moviesTable.tableName,
       },
+    });
+
+    //GET BY ID
+    const getMovieByIdLambda = new lambdaNode.NodejsFunction(this, "GetMovieByIdLambda", {
+      entry: "lambda/getMovieById.js",
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: "handler",
+      environment: {TABLE_NAME: moviesTable.tableName},
     });
 
     // POST 
@@ -35,18 +43,36 @@ export class CloudAppCaStack extends cdk.Stack {
       },
     });
 
+    //DELETE
+    const deleteMovieLambda = new lambdaNode.NodejsFunction(this, "DeleteMovieLambda", {
+      entry: "lambda/deleteMovie.js",
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: "handler",
+      environment: {TABLE_NAME: moviesTable.tableName},
+    });
+
+    //PERMISSIONS
     moviesTable.grantReadData(getMoviesLambda);
     moviesTable.grantReadWriteData(addMovieLambda);
+    moviesTable.grantReadData(getMovieByIdLambda);
+    moviesTable.grantReadWriteData(deleteMovieLambda);
 
+    //API
     const api = new apigateway.RestApi(this, 'MoviesApi', {
       restApiName: 'Movies Service',
       description: 'API for managing movie information.',
     });
+
 
     const movies = api.root.addResource('movies');
     movies.addMethod('GET', new apigateway.LambdaIntegration(getMoviesLambda));
     movies.addMethod('POST', new apigateway.LambdaIntegration(addMovieLambda));
 
     new cdk.CfnOutput(this, 'ApiUrl', { value: api.url ?? 'No URL returned' });
+  
+  const movieById = movies.addResource("{id}");
+  movies.addMethod('GET', new apigateway.LambdaIntegration(getMovieByIdLambda));
+  movies.addMethod('DELETE', new apigateway.LambdaIntegration(deleteMovieLambda));
+  
   }
 }

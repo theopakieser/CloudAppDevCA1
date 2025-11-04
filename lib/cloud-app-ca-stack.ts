@@ -17,7 +17,7 @@ export class CloudAppCaStack extends cdk.Stack {
 
     // GET
     const getMoviesLambda = new lambdaNode.NodejsFunction(this, 'GetMoviesLambda', {
-      entry: 'lambda/getMovies.js',
+      entry: 'lambda/movies/getMovies.js',
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: 'handler',
       environment: {
@@ -27,7 +27,7 @@ export class CloudAppCaStack extends cdk.Stack {
 
     //GET BY ID
     const getMovieByIdLambda = new lambdaNode.NodejsFunction(this, "GetMovieByIdLambda", {
-      entry: "lambda/getMovieById.js",
+      entry: "lambda/movies/getMovieById.js",
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: "handler",
       environment: {TABLE_NAME: moviesTable.tableName},
@@ -35,7 +35,7 @@ export class CloudAppCaStack extends cdk.Stack {
 
     // POST 
     const addMovieLambda = new lambdaNode.NodejsFunction(this, 'AddMovieLambda', {
-      entry: 'lambda/addMovie.js',
+      entry: 'lambda/movies/addMovie.js',
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: 'handler',
       environment: {
@@ -45,7 +45,7 @@ export class CloudAppCaStack extends cdk.Stack {
 
     //DELETE
     const deleteMovieLambda = new lambdaNode.NodejsFunction(this, "DeleteMovieLambda", {
-      entry: "lambda/deleteMovie.js",
+      entry: "lambda/movies/deleteMovie.js",
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: "handler",
       environment: {TABLE_NAME: moviesTable.tableName},
@@ -53,14 +53,14 @@ export class CloudAppCaStack extends cdk.Stack {
 
     //ACTORS
     const getActorsLambda = new lambdaNode.NodejsFunction(this, "GetActorsLambda", {
-      entry: "lambda/getActors.js",
+      entry: "lambda/actors/getActors.js",
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: "handler",
       environment: {TABLE_NAME: moviesTable.tableName},
     });
 
      const addActorsLambda = new lambdaNode.NodejsFunction(this, "AddActorsLambda", {
-      entry: "lambda/addActor.js",
+      entry: "lambda/actors/addActor.js",
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: "handler",
       environment: {TABLE_NAME: moviesTable.tableName},

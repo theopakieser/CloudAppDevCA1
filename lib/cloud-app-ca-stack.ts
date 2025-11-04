@@ -66,6 +66,15 @@ export class CloudAppCaStack extends cdk.Stack {
       environment: {TABLE_NAME: moviesTable.tableName},
     });
 
+    //AWARDS
+    const getAwardsLambda = new lambdaNode.NodejsFunction(this, "GetAwardsLambda", {
+      entry: "lambda/actors/getAwards.js",
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: "handler",
+      environment: {TABLE_NAME: moviesTable.tableName},
+    });
+
+
     //PERMISSIONS
     moviesTable.grantReadData(getMoviesLambda);
     moviesTable.grantReadWriteData(addMovieLambda);
@@ -73,6 +82,7 @@ export class CloudAppCaStack extends cdk.Stack {
     moviesTable.grantReadWriteData(deleteMovieLambda);
     moviesTable.grantReadData(getActorsLambda);
     moviesTable.grantReadWriteData(addActorsLambda);
+    moviesTable.grantReadData(getAwardsLambda);
 
 
     //API
@@ -88,13 +98,16 @@ export class CloudAppCaStack extends cdk.Stack {
 
     new cdk.CfnOutput(this, 'ApiUrl', { value: api.url ?? 'No URL returned' });
   
-  const movieById = movies.addResource("{id}");
-  movies.addMethod('GET', new apigateway.LambdaIntegration(getMovieByIdLambda));
-  movies.addMethod('DELETE', new apigateway.LambdaIntegration(deleteMovieLambda));
+    const movieById = movies.addResource("{id}");
+    movies.addMethod('GET', new apigateway.LambdaIntegration(getMovieByIdLambda));
+    movies.addMethod('DELETE', new apigateway.LambdaIntegration(deleteMovieLambda));
   
     const actors = api.root.addResource('actors');
     movies.addMethod('GET', new apigateway.LambdaIntegration(getActorsLambda));
     movies.addMethod('POST', new apigateway.LambdaIntegration(addActorsLambda)); 
+
+    const awards = api.root.addResource('awards');
+    movies.addMethod('GET', new apigateway.LambdaIntegration(getActorsLambda));
 
 
   }

@@ -85,30 +85,32 @@ export class CloudAppCaStack extends cdk.Stack {
     moviesTable.grantReadData(getAwardsLambda);
 
 
-    //API
-    const api = new apigateway.RestApi(this, 'MoviesApi', {
-      restApiName: 'Movies Service',
-      description: 'API for managing movie information.',
-    });
+// API
+const api = new apigateway.RestApi(this, "MoviesApi", {
+  restApiName: "Movies Service",
+  description: "API for managing movie information.",
+});
 
+// /movies
+const movies = api.root.addResource("movies");
+movies.addMethod("GET", new apigateway.LambdaIntegration(getMoviesLambda));
+movies.addMethod("POST", new apigateway.LambdaIntegration(addMovieLambda));
 
-    const movies = api.root.addResource('movies');
-    movies.addMethod('GET', new apigateway.LambdaIntegration(getMoviesLambda));
-    movies.addMethod('POST', new apigateway.LambdaIntegration(addMovieLambda));
+// /movies/{id}
+const movieById = movies.addResource("{id}");
+movieById.addMethod("GET", new apigateway.LambdaIntegration(getMovieByIdLambda));
+movieById.addMethod("DELETE", new apigateway.LambdaIntegration(deleteMovieLambda));
 
-    new cdk.CfnOutput(this, 'ApiUrl', { value: api.url ?? 'No URL returned' });
-  
-    const movieById = movies.addResource("{id}");
-    movies.addMethod('GET', new apigateway.LambdaIntegration(getMovieByIdLambda));
-    movies.addMethod('DELETE', new apigateway.LambdaIntegration(deleteMovieLambda));
-  
-    const actors = api.root.addResource('actors');
-    movies.addMethod('GET', new apigateway.LambdaIntegration(getActorsLambda));
-    movies.addMethod('POST', new apigateway.LambdaIntegration(addActorsLambda)); 
+// /actors
+const actors = api.root.addResource("actors");
+actors.addMethod("GET", new apigateway.LambdaIntegration(getActorsLambda));
+actors.addMethod("POST", new apigateway.LambdaIntegration(addActorsLambda));
 
-    const awards = api.root.addResource('awards');
-    movies.addMethod('GET', new apigateway.LambdaIntegration(getActorsLambda));
+// /awards
+const awards = api.root.addResource("awards");
+awards.addMethod("GET", new apigateway.LambdaIntegration(getAwardsLambda));
 
-
+// Output the API URL
+new cdk.CfnOutput(this, "ApiUrl", { value: api.url ?? "No URL returned" });
   }
 }

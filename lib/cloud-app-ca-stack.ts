@@ -74,6 +74,23 @@ export class CloudAppCaStack extends cdk.Stack {
       environment: {TABLE_NAME: moviesTable.tableName},
     });
 
+    //CAST by movie
+  const getCastByMovieLambda = new lambdaNode.NodejsFunction(this, "GetCastByMovieLambda", {
+    entry: "lambda/cast/getCastByMovie.js",
+    runtime: lambda.Runtime.NODEJS_18_X,
+    handler: "handler",
+    environment: { TABLE_NAME: moviesTable.tableName },
+  });
+
+  //ACTOR in movie
+  const getActorInMovieLambda = new lambdaNode.NodejsFunction(this, "GetActorInMovieLambda", {
+    entry: "lambda/cast/getActorInMovie.js",
+    runtime: lambda.Runtime.NODEJS_18_X,
+    handler: "handler",
+    environment: { TABLE_NAME: moviesTable.tableName },
+  });
+
+
 
     //PERMISSIONS
     moviesTable.grantReadData(getMoviesLambda);
@@ -83,6 +100,9 @@ export class CloudAppCaStack extends cdk.Stack {
     moviesTable.grantReadData(getActorsLambda);
     moviesTable.grantReadWriteData(addActorsLambda);
     moviesTable.grantReadData(getAwardsLambda);
+    moviesTable.grantReadData(getCastByMovieLambda);
+    moviesTable.grantReadData(getActorInMovieLambda);
+
 
 
 // API
@@ -109,6 +129,11 @@ actors.addMethod("POST", new apigateway.LambdaIntegration(addActorsLambda));
 // /awards
 const awards = api.root.addResource("awards");
 awards.addMethod("GET", new apigateway.LambdaIntegration(getAwardsLambda));
+
+// /movies/{id}/actors
+const actorsInMovie = movieById.addResource("actors");
+actorsInMovie.addMethod("GET", new apigateway.LambdaIntegration(getCastByMovieLambda));
+
 
 // Output the API URL
 new cdk.CfnOutput(this, "ApiUrl", { value: api.url ?? "No URL returned" });

@@ -6,7 +6,8 @@ const client = new DynamoDBClient({});
 exports.handler = async (event) => {
   try {
     const movieId = event.pathParameters.id;
-    const pk = `c${movieId}`;
+    const cleanId = movieId.startsWith("m") ? movieId.substring(1) : movieId;
+    const pk = `c${cleanId}`;
 
     const data = await client.send(
       new QueryCommand({

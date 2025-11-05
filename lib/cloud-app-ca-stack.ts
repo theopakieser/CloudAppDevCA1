@@ -134,6 +134,10 @@ awards.addMethod("GET", new apigateway.LambdaIntegration(getAwardsLambda));
 const actorsInMovie = movieById.addResource("actors");
 actorsInMovie.addMethod("GET", new apigateway.LambdaIntegration(getCastByMovieLambda));
 
+// /movies/{id}/actors/{actorId}
+const specificActor = actorsInMovie.addResource("{actorId}");
+specificActor.addMethod("GET", new apigateway.LambdaIntegration(getActorInMovieLambda));
+
 
 // Output the API URL
 new cdk.CfnOutput(this, "ApiUrl", { value: api.url ?? "No URL returned" });

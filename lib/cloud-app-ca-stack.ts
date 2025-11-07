@@ -68,7 +68,7 @@ export class CloudAppCaStack extends cdk.Stack {
 
     //AWARDS
     const getAwardsLambda = new lambdaNode.NodejsFunction(this, "GetAwardsLambda", {
-      entry: "lambda/actors/getAwards.js",
+      entry: "lambda/awards/getAwards.js",
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: "handler",
       environment: {TABLE_NAME: moviesTable.tableName},

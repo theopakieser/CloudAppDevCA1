@@ -22,6 +22,9 @@ exports.handler = async (event) => {
       Item: marshall(movieItem)
     }));
 
+    console.log(`POST + ${movie.pk} | ${movie.title} | ${movie.releaseDate} | ${movie.overview}`);
+
+
     return {
       statusCode: 201,
       body: JSON.stringify({ message: "Movie added", movieItem })

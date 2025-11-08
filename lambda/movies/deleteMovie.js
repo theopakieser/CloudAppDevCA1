@@ -26,7 +26,7 @@ exports.handler = async (event) => {
       };
     }
 
-    console.log("Deleted:", result.Attributes);
+console.log(`DELETE + ${movie.pk} | ${movie.title} | Movie removed from table`);
 
     return {
       statusCode: 200,

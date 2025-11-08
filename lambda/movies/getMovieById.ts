@@ -1,12 +1,17 @@
-const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
-const { unmarshall } = require("@aws-sdk/util-dynamodb");
+import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
+import { unmarshall } from "@aws-sdk/util-dynamodb";
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 
 const client = new DynamoDBClient({});
 
-exports.handler = async (event) => {
+export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   try {
-    const movieId = event.pathParameters.id;
-    const pk = movieId.startsWith("m") ? movieId: `m${movieId}`;
+    const movieId = event.pathParameters?.id;
+    if (!movieId) {
+      return { statusCode: 400, body: JSON.stringify({ error: "Movie ID is required" }) };
+    }
+
+    const pk = `m${movieId}`;
 
     const data = await client.send(
       new GetItemCommand({
@@ -15,12 +20,13 @@ exports.handler = async (event) => {
       })
     );
 
-    if (!data.Item)
+    if (!data.Item) {
       return { statusCode: 404, body: JSON.stringify({ message: "Movie not found" }) };
+    }
 
     const movie = unmarshall(data.Item);
     return { statusCode: 200, body: JSON.stringify(movie) };
-  } catch (err) {
+  } catch (err: any) {
     console.error("Error in GetMovieByIdLambda:", err);
     return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }

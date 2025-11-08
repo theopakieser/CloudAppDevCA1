@@ -24,7 +24,7 @@ export class CloudAppCaStack extends cdk.Stack {
 
     // GET
     const getMoviesLambda = new lambdaNode.NodejsFunction(this, 'GetMoviesLambda', {
-      entry: 'lambda/movies/getMovies.js',
+      entry: 'lambda/movies/getMovies.ts',
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: 'handler',
       environment: {
@@ -34,7 +34,7 @@ export class CloudAppCaStack extends cdk.Stack {
 
     //GET BY ID
     const getMovieByIdLambda = new lambdaNode.NodejsFunction(this, "GetMovieByIdLambda", {
-      entry: "lambda/movies/getMovieById.js",
+      entry: "lambda/movies/getMovieById.ts",
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: "handler",
       environment: {TABLE_NAME: moviesTable.tableName},
@@ -42,7 +42,7 @@ export class CloudAppCaStack extends cdk.Stack {
 
     // ADD 
     const addMovieLambda = new lambdaNode.NodejsFunction(this, 'AddMovieLambda', {
-      entry: 'lambda/movies/addMovie.js',
+      entry: 'lambda/movies/addMovie.ts',
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: 'handler',
       environment: {
@@ -52,7 +52,7 @@ export class CloudAppCaStack extends cdk.Stack {
 
     //DELETE
     const deleteMovieLambda = new lambdaNode.NodejsFunction(this, "DeleteMovieLambda", {
-      entry: "lambda/movies/deleteMovie.js",
+      entry: "lambda/movies/deleteMovie.ts",
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: "handler",
       environment: {TABLE_NAME: moviesTable.tableName},
@@ -60,14 +60,14 @@ export class CloudAppCaStack extends cdk.Stack {
 
     //ACTORS
     const getActorsLambda = new lambdaNode.NodejsFunction(this, "GetActorsLambda", {
-      entry: "lambda/actors/getActors.js",
+      entry: "lambda/actors/getActors.ts",
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: "handler",
       environment: {TABLE_NAME: moviesTable.tableName},
     });
 
      const addActorsLambda = new lambdaNode.NodejsFunction(this, "AddActorsLambda", {
-      entry: "lambda/actors/addActor.js",
+      entry: "lambda/actors/addActor.ts",
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: "handler",
       environment: {TABLE_NAME: moviesTable.tableName},
@@ -75,7 +75,7 @@ export class CloudAppCaStack extends cdk.Stack {
 
     //AWARDS
     const getAwardsLambda = new lambdaNode.NodejsFunction(this, "GetAwardsLambda", {
-      entry: "lambda/awards/getAwards.js",
+      entry: "lambda/awards/getAwards.ts",
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: "handler",
       environment: {TABLE_NAME: moviesTable.tableName},
@@ -83,7 +83,7 @@ export class CloudAppCaStack extends cdk.Stack {
 
     //CAST by movie
   const getCastByMovieLambda = new lambdaNode.NodejsFunction(this, "GetCastByMovieLambda", {
-    entry: "lambda/cast/getCastByMovie.js",
+    entry: "lambda/cast/getCastByMovie.ts",
     runtime: lambda.Runtime.NODEJS_18_X,
     handler: "handler",
     environment: { TABLE_NAME: moviesTable.tableName },
@@ -91,7 +91,7 @@ export class CloudAppCaStack extends cdk.Stack {
 
   //ACTOR in movie
   const getActorInMovieLambda = new lambdaNode.NodejsFunction(this, "GetActorInMovieLambda", {
-    entry: "lambda/cast/getActorInMovie.js",
+    entry: "lambda/cast/getActorInMovie.ts",
     runtime: lambda.Runtime.NODEJS_18_X,
     handler: "handler",
     environment: { TABLE_NAME: moviesTable.tableName },

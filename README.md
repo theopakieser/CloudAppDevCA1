@@ -31,7 +31,11 @@ jbloggs /awards?movie=1234&awardBody=Academy
 
 ###  Extra (If relevant).
 
-[ State any other aspects of your solution that use CDK/serverless features not covered in the lectures.]
+During development, the Lambda functions were originally written in plain JavaScript. This happened because I focused first on getting the API logic, DynamoDB integration, and testing working correctly. 
+
+After reviewing the labs and assignment specifications, I realised the implementation was expected to use TypeScript. 
+
+Since the AWS CDK automatically supports TypeScript compilation, I refactored all handlers to .ts files, added basic type definitions, and redeployed the stack to match the lab standards.
 
 [api]: ./images/api.png
 [db]: ./images/db.png

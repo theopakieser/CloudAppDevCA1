@@ -11,7 +11,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       return { statusCode: 400, body: JSON.stringify({ error: "Movie ID is required" }) };
     }
 
-    const pk = `m${movieId}`;
+    const pk = movieId;
 
     const data = await client.send(
       new GetItemCommand({

@@ -13,7 +13,7 @@ export const handler = async (
       return { statusCode: 400, body: JSON.stringify({ message: "Movie ID is required" }) };
     }
 
-    const pk = `m${movieId}`;
+    const pk = movieId;
 
     await client.send(
       new DeleteItemCommand({

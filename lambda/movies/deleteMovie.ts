@@ -1,38 +1,34 @@
-const { DynamoDBClient, DeleteItemCommand } = require("@aws-sdk/client-dynamodb");
+import { DynamoDBClient, DeleteItemCommand } from "@aws-sdk/client-dynamodb";
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 
 const client = new DynamoDBClient({});
 
-exports.handler = async (event) => {
+export const handler = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
   try {
-    const movieId = event.pathParameters.id;
-    const pk = movieId.startsWith("m") ? movieId : `m${movieId}`;
+    const movieId = event.pathParameters?.id;
 
-    const params = {
-      TableName: process.env.TABLE_NAME,
-      Key: {
-        pk: { S: pk },
-        sk: { S: "xxxx" },
-      },
-      ReturnValues: "ALL_OLD",
-    };
-
-    const result = await client.send(new DeleteItemCommand(params));
-
-    if (!result.Attributes) {
-      console.log("No item found to delete:", pk);
-      return {
-        statusCode: 404,
-        body: JSON.stringify({ message: `Movie ${pk} not found.` }),
-      };
+    if (!movieId) {
+      return { statusCode: 400, body: JSON.stringify({ message: "Movie ID is required" }) };
     }
 
-console.log(`DELETE + ${movie.pk} | ${movie.title} | Movie removed from table`);
+    const pk = `m${movieId}`;
+
+    await client.send(
+      new DeleteItemCommand({
+        TableName: process.env.TABLE_NAME,
+        Key: { pk: { S: pk }, sk: { S: "xxxx" } },
+      })
+    );
+
+    console.log(`DELETE + ${pk} | Movie removed from table`);
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: `Movie ${pk} deleted.` }),
+      body: JSON.stringify({ message: `Movie ${movieId} deleted.` }),
     };
-  } catch (err) {
+  } catch (err: any) {
     console.error("Error in DeleteMovieLambda:", err);
     return {
       statusCode: 500,

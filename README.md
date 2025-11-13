@@ -1,33 +1,35 @@
 ## Assignment - Cloud App Development.
 
-__Name:__ ....your name .....
+__Name:__ Theo Pakieser
 
 ### Links.
-__Demo:__ A link to your YouTube video demonstration.]
+__Demo:__ A link to your YouTube video demonstration.
 
 ### Screenshots.
 
-[A screenshot of the App Web API from the management console, e.g.
-
 ![][api]
 
-The Auth API is not required as its code was provided in the labs.
-
-]
-
-[A screenshot of your seeded table from DynamoDB, e.g.
 
 ![][db]
-]
 
-[A screenshot from CloudWatch logs showing an example of User Activity logging, e.g.
-
-jbloggs /awards?movie=1234&awardBody=Academy
-]
 
 ### Design features (if required).
 
-[Briefly explain any design features of the App API in terms of custom L2 constructs, multi-stack, and lambda layers.]
+- This App API follows a multi-stack architecture consisting of two AWS CDK stacks:
+    - Auth Stack – Implements a Cognito User Pool and Lambda handlers for user signup, confirmation, and login.
+    - CloudAppCaStack – Defines the main Movies Service API, DynamoDB table, and all Lambda functions for CRUD operations.
+
+The design uses a single-table DynamoDB model:
+    - All entities (Movies, Actors, Cast, Awards) are stored in one table.
+    - Each item’s partition key (pk) includes a type prefix (m, a, c, w).
+    - Sort keys (sk) vary by entity type (e.g. xxxx, actor ID, or award body).
+
+All AWS Lambda functions were implemented in TypeScript and use the AWS SDK v3 (@aws-sdk/client-dynamodb) with marshall/unmarshall utilities.
+
+The API Gateway configuration includes:
+    - Cognito authorizer for user-level access (GET requests).
+    - API key requirement for administrator-level access (POST, PUT, DELETE).
+    - Regional endpoint configuration for easier testing and deployment.
 
 ###  Extra (If relevant).
 
@@ -39,3 +41,4 @@ Since the AWS CDK automatically supports TypeScript compilation, I refactored al
 
 [api]: ./images/api.png
 [db]: ./images/db.png
+

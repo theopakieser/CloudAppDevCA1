@@ -1,9 +1,12 @@
+# Ignore compiled Lambda output
+lambda/**/*.js
+lambda/**/*.js.map
+lambda/**/*.d.ts
 
-!lambda/**/*.js
+# Ignore CDK build output
+.cdk.out/
+cdk.out/
 
-*.d.ts
-node_modules
-
-# CDK asset staging directory
-.cdk.staging
-cdk.out
+# Ignore Node build artifacts
+node_modules/
+dist/

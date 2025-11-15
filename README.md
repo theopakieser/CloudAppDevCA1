@@ -14,9 +14,6 @@ __Demo:__ A link to your YouTube video demonstration.
 
 
 ### Design features (if required).
-
-- This App API follows a multi-stack architecture consisting of two AWS CDK stacks:
-    - Auth Stack – Implements a Cognito User Pool and Lambda handlers for user signup, confirmation, and login.
     - CloudAppCaStack – Defines the main Movies Service API, DynamoDB table, and all Lambda functions for CRUD operations.
 
 The design uses a single-table DynamoDB model:
@@ -26,10 +23,6 @@ The design uses a single-table DynamoDB model:
 
 All AWS Lambda functions were implemented in TypeScript and use the AWS SDK v3 (@aws-sdk/client-dynamodb) with marshall/unmarshall utilities.
 
-The API Gateway configuration includes:
-    - Cognito authorizer for user-level access (GET requests).
-    - API key requirement for administrator-level access (POST, PUT, DELETE).
-    - Regional endpoint configuration for easier testing and deployment.
 
 ###  Extra (If relevant).
 

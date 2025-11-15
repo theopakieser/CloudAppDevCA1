@@ -32,6 +32,8 @@ After reviewing the labs and assignment specifications, I realised the implement
 
 Since the AWS CDK automatically supports TypeScript compilation, I refactored all handlers to .ts files, added basic type definitions, and redeployed the stack to match the lab standards.
 
+Originally, I did include Authentication, which worked up until the day I decided to record the demo. I don't know what broke but I was unable to fix it in time for the due date so, I had to cut it completely in order to produce something that worked.
+
 [api]: ./images/api.png
 [db]: ./images/db.png
 
